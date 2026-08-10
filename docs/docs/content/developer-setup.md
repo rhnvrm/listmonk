@@ -1,10 +1,9 @@
 # Developer setup
-The app is a Go backend that server-renders the admin UI (HTML templates with JS, built with [bun](https://bun.sh)). 
+The app is a Go backend that server-renders the admin UI (HTML templates with JS, bundled by [esgun](https://github.com/oddship/esgun), a Go build tool; no node/npm/bun required).
 
 
 ### Pre-requisites
-- `go`
-- `bun` (if you are working on the admin frontend)
+- `go` only: esgun is pinned as a Go tool dependency (`tool github.com/oddship/esgun`), run via `go tool esgun`
 - Postgres database. If there is no local installation, the demo docker DB can be used for development (`docker compose up demo-db`)
 
 
@@ -25,7 +24,7 @@ After setting up the dev environment, you can visit `http://localhost:9000`.
 
 1. Locally
 
-    - Run `make run` to start the listmonk dev server on `:9000`. It builds the SSR admin assets (from `static/admin/`) and serves the admin at `/admin`. To rebuild admin assets on change while developing, run `cd static/admin && bun run watch` in a separate terminal.
+    - Run `make run` to start the listmonk dev server on `:9000`. It builds the SSR admin assets (from `static/admin/`) and serves the admin at `/admin`. To rebuild admin assets on change while developing, run `go tool esgun watch --dir static/admin` in a separate terminal.
 
 2. Inside containers (Using Makefile)
 

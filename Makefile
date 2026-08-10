@@ -11,13 +11,17 @@ GOPATH ?= $(HOME)/go
 STUFFBIN ?= $(GOPATH)/bin/stuffbin
 
 # SSR admin frontend (built from static/admin/src -> static/admin/dist).
+# The frontend build is Go-only: deps are resolved into vendor/ by esgun,
+# pinned as a Go tool dependency (tool github.com/oddship/esgun) and invoked
+# via `go tool esgun`. Install a PATH binary with go install if preferred.
+ESGUN ?= go tool esgun
 FRONTEND = static/admin
 FRONTEND_DIST = $(FRONTEND)/dist
-FRONTEND_NODE_MODULES = $(FRONTEND)/node_modules
+FRONTEND_VENDOR = $(FRONTEND)/vendor/node_modules
 FRONTEND_DEPS = \
-	$(FRONTEND_NODE_MODULES) \
+	$(FRONTEND_VENDOR) \
 	$(FRONTEND)/package.json \
-	$(FRONTEND)/build.mjs \
+	$(FRONTEND)/package-lock.json \
 	$(shell find $(FRONTEND)/src -type f)
 
 BIN := listmonk
@@ -49,14 +53,14 @@ $(BIN): $(SRC) go.mod go.sum schema.sql $(SQL) permissions.json
 run: $(FRONTEND_DIST)
 	CGO_ENABLED=0 go run -ldflags="-s -w -X 'main.buildString=${BUILDSTR}' -X 'main.versionString=${VERSION}'" ./cmd
 
-# Install SSR admin frontend deps.
-$(FRONTEND_NODE_MODULES): $(FRONTEND)/package.json
-	cd $(FRONTEND) && bun install
-	touch -c $(FRONTEND_NODE_MODULES)
+# Fetch + verify SSR admin frontend deps (esgun; no node/npm/bun needed).
+$(FRONTEND_VENDOR): $(FRONTEND)/package.json $(FRONTEND)/package-lock.json
+	$(ESGUN) deps --dir $(FRONTEND)
+	touch -c $(FRONTEND_VENDOR)
 
-# Build the SSR admin frontend (Bun) into static/admin/dist.
+# Build the SSR admin frontend into static/admin/dist.
 $(FRONTEND_DIST): $(FRONTEND_DEPS)
-	cd $(FRONTEND) && bun run build
+	$(ESGUN) build --dir $(FRONTEND)
 	touch -c $(FRONTEND_DIST)
 
 .PHONY: build-frontend

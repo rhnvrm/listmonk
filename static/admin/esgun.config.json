@@ -1,0 +1,88 @@
+{
+  "root": "dist",
+  "outdir": "dist/js",
+  "resolve": [
+    "vendor/node_modules"
+  ],
+  "copies": [
+    {
+      "from": "src/static",
+      "to": "dist"
+    },
+    {
+      "from": "src/css/style.css",
+      "to": "dist/style.css"
+    },
+    {
+      "from": "vendor/node_modules/alpinejs/dist/cdn.min.js",
+      "to": "dist/vendor/alpinejs.min.js"
+    },
+    {
+      "from": "vendor/node_modules/@knadh/oat/oat.min.js",
+      "to": "dist/vendor/oat.min.js"
+    },
+    {
+      "from": "vendor/node_modules/@knadh/oat/oat.min.css",
+      "to": "dist/vendor/oat.min.css"
+    },
+    {
+      "from": "vendor/node_modules/chart.js/dist/chart.umd.js",
+      "to": "dist/vendor/chart.min.js"
+    }
+  ],
+  "treeCopies": [
+    {
+      "from": "vendor/node_modules/tinymce",
+      "to": "dist/tinymce",
+      "include": [
+        "tinymce.min.js",
+        "themes/silver/theme.min.js",
+        "icons/default/icons.min.js",
+        "skins/ui/oxide",
+        "skins/content/default/content.min.css",
+        "plugins/anchor/plugin.min.js",
+        "plugins/autoresize/plugin.min.js",
+        "plugins/autolink/plugin.min.js",
+        "plugins/charmap/plugin.min.js",
+        "plugins/emoticons/plugin.min.js",
+        "plugins/fullscreen/plugin.min.js",
+        "plugins/help/plugin.min.js",
+        "plugins/hr/plugin.min.js",
+        "plugins/image/plugin.min.js",
+        "plugins/imagetools/plugin.min.js",
+        "plugins/link/plugin.min.js",
+        "plugins/lists/plugin.min.js",
+        "plugins/paste/plugin.min.js",
+        "plugins/searchreplace/plugin.min.js",
+        "plugins/table/plugin.min.js",
+        "plugins/visualblocks/plugin.min.js",
+        "plugins/visualchars/plugin.min.js",
+        "plugins/wordcount/plugin.min.js",
+        "plugins/emoticons/js/emojis.min.js"
+      ]
+    },
+    {
+      "from": "vendor/node_modules/tinymce-i18n/langs5",
+      "to": "dist/tinymce/lang",
+      "include": [
+        "cs.js",
+        "de.js",
+        "es_MX.js",
+        "fr_FR.js",
+        "it_IT.js",
+        "pl.js",
+        "pt_PT.js",
+        "pt_BR.js",
+        "ro.js",
+        "tr.js"
+      ]
+    }
+  ],
+  "entry": [
+    "src/js/main.js",
+    "src/js/code-editor.js",
+    "src/js/richtext-editor.js",
+    "src/js/visual-editor.js",
+    "src/js/views/*.js"
+  ]
+}

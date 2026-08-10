@@ -14,7 +14,8 @@ import { beautifyHTML } from './content.js';
 const CONFIG = (typeof window !== 'undefined' && window._LM_CONFIG) || {};
 
 // Map of listmonk language codes to TinyMCE language files (shipped by tinymce-i18n,
-// copied into dist/tinymce/lang/ at build time — keep in sync with TINY_LANGS in build.mjs).
+// copied into dist/tinymce/lang/ at build time; keep in sync with the
+// tinymce-i18n treeCopy in esgun.config.json).
 // es -> es_MX: tinymce-i18n no longer ships the old es_419 (Latin American) pack.
 const LANGS = {
   cs: 'cs', de: 'de', es: 'es_MX', fr: 'fr_FR', it: 'it_IT',

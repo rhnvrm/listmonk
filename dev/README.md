@@ -18,7 +18,7 @@ To spin up a local suite of:
 
 - PostgreSQL
 - Mailhog
-- Node.js frontend app
+- SSR admin frontend (built by esgun (Go))
 - Golang backend app
 
 ### Verify your config file

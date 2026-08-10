@@ -1,8 +1,7 @@
-FROM golang:1.24.1 AS go
+# Dev container for the SSR admin + backend. The frontend build is Go-only
+# (esgun, github.com/oddship/esgun), so no node/npm/bun is needed.
+FROM golang:1.26
 
-FROM node:16 AS node
-
-COPY --from=go /usr/local/go /usr/local/go
 ENV GOPATH /go
 ENV CGO_ENABLED=0
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH

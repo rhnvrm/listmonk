@@ -89,7 +89,7 @@ A nightly build is automatically published with the latest changes merged to the
 
 To compile the latest unreleased version (`master` branch):
 
-1. Make sure `go` and `bun` are installed on your system.
+1. Make sure `go` is installed (esgun is pinned as a Go tool dependency in go.mod and invoked via `go tool esgun`; no node/npm/bun required).
 2. `git clone git@github.com:knadh/listmonk.git`
 3. `cd listmonk && make dist`. This will build the SSR admin frontend and generate the `listmonk` binary.
 
