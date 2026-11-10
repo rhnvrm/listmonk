@@ -47,7 +47,7 @@ Commit both `package.json` and `package-lock.json` after changing dependencies. 
 
 ### Frontend tests
 
-listmonk maintains a Playwright suite in `tests/` for end-to-end testing the admin UI. It runs against the Docker dev environment with Postgres and MailHog. Playwright requires Node.js and npm, installed separately in the dev container; these are not required to build listmonk.
+listmonk maintains a Playwright suite in `tests/` for end-to-end testing the admin UI. It runs against the Docker dev environment with Postgres and MailHog. Install Bun separately in the dev container to run Playwright with the test dependencies pinned in `tests/bun.lock`. Bun is not required to build listmonk.
 
 #### Running
 
@@ -59,9 +59,9 @@ Inside the dev container shell at `/app`:
 make dist
 
 cd tests
-npm install
-npx playwright install --with-deps chromium
-npm test
+bun install --frozen-lockfile
+bun playwright install --with-deps chromium
+bun run test
 ```
 
 # Production build
