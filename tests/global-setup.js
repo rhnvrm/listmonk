@@ -13,6 +13,8 @@ export default async function globalSetup() {
   }
 
   mkdirSync(new URL('.auth', import.meta.url).pathname, { recursive: true });
+  // Fresh checkouts do not have the default filesystem media directory.
+  mkdirSync(new URL('../uploads', import.meta.url).pathname, { recursive: true });
 
   const browser = await chromium.launch(launchOptions);
   await login(await browser.newContext());

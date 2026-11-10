@@ -30,6 +30,10 @@ bun playwright install --with-deps chromium
 bun run test
 ```
 
+The browser dependency step installs system libraries and fonts needed by the
+visual-editor iframe. Test setup creates the default `uploads/` directory for
+media and attachment tests on fresh checkouts.
+
 Compose configures the database and existing MailHog service automatically.
 Rebuild the backend after Go or SQL changes, and reinstall the browser and its
 system dependencies when recreating the dev container.
