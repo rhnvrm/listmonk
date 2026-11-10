@@ -12,4 +12,3 @@ dist/*
 uploads/
 
 static/admin/vendor/
-static/admin/.build/

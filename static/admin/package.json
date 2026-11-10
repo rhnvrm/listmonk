@@ -5,8 +5,8 @@
   "type": "module",
   "description": "Build pipeline for the listmonk SSR admin frontend (esgun + Alpine + Oat).",
   "scripts": {
-    "build": "go run ../../scripts/frontend",
-    "watch": "go run ../../scripts/frontend --watch"
+    "build": "make -C ../.. build-frontend",
+    "watch": "make -C ../.. watch-frontend"
   },
   "dependencies": {
     "@codemirror/commands": "^6.10.4",

@@ -29,9 +29,9 @@ Run `make stop-dev-docker` to stop the container and `make rm-dev-docker` to com
 
 ### Working on the frontend
 
-`make build-frontend` installs the locked npm dependencies with the esgun version pinned in `go.mod`, bundles the JavaScript, and compresses the admin assets. It also copies ALTCHA to the public frontend. Dependencies are stored in `static/admin/vendor/node_modules`; intermediate output is in `static/admin/.build`. Neither directory is committed.
+`make build-frontend` installs the locked npm dependencies with esgun v0.1.0, pinned as a Go tool in `go.mod`. esgun bundles the JavaScript and compresses admin assets directly into `static/admin/dist`, as configured in `esgun.config.json`. The Makefile separately copies uncompressed ALTCHA to the public frontend. Dependencies are stored in `static/admin/vendor/node_modules`, which is not committed.
 
-Run `make watch-frontend` alongside `make run` to rebuild and compress assets when frontend sources change. The Go driver preserves the mounted `dist` directory in Docker.
+Run `make watch-frontend` alongside `make run` to use esgun’s native watcher. Source edits and config-only edits rebuild and compress the frontend. `preserveRoot` keeps Docker’s mounted `dist` directory in place; publication is non-atomic, so readers can briefly see partially populated output. Invalid builds keep the last working assets.
 
 To manage dependencies, run these commands from the repository root:
 
@@ -43,7 +43,7 @@ go tool esgun outdated --dir static/admin
 go tool esgun audit --dir static/admin
 ```
 
-Commit both `package.json` and `package-lock.json` after changing dependencies. Builds use `esgun ci`, which rejects lockfile drift. Use `make watch-frontend` for development so compression and the public ALTCHA copy run after each bundle.
+Commit both `package.json` and `package-lock.json` after changing dependencies. Builds use `esgun ci`, which rejects incompatible lockfile drift. Restart `make watch-frontend` after dependency changes so installation and the public ALTCHA copy run again. The standard `build` and `watch` package scripts invoke these Make targets, including icon generation and the public asset copy.
 
 ### Frontend tests
 

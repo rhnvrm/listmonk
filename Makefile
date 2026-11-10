@@ -15,6 +15,7 @@ FRONTEND = static/admin
 FRONTEND_DIST = $(FRONTEND)/dist
 FRONTEND_NODE_MODULES = $(FRONTEND)/vendor/node_modules
 FRONTEND_DEPS_STAMP = $(FRONTEND_NODE_MODULES)/.installed
+FRONTEND_ALTCHA = static/public/static/altcha.umd.js
 
 # Feather icons SVG sprite generated from icons.txt.
 FRONTEND_ICONS_LIST = $(FRONTEND)/icons.txt
@@ -25,7 +26,6 @@ FRONTEND_DEPS = \
 	$(FRONTEND)/package.json \
 	$(FRONTEND)/package-lock.json \
 	$(FRONTEND)/esgun.config.json \
-	$(wildcard scripts/frontend/*.go) \
 	$(shell find $(FRONTEND)/assets -type f)
 
 BIN := listmonk
@@ -72,6 +72,10 @@ $(FRONTEND_DEPS_STAMP): $(FRONTEND)/package.json $(FRONTEND)/package-lock.json g
 	cd $(FRONTEND) && go tool esgun ci
 	touch $@
 
+# ALTCHA is served uncompressed by public forms, outside the admin output root.
+$(FRONTEND_ALTCHA): $(FRONTEND_DEPS_STAMP)
+	cp $(FRONTEND_NODE_MODULES)/altcha/dist/main/altcha.umd.min.cjs $@
+
 # Generate svg icon sprite.
 $(FRONTEND_ICONS): $(FRONTEND_ICONS_LIST) scripts/build-icons.py
 	python3 scripts/build-icons.py --icons $(FRONTEND_ICONS_LIST) --out $(FRONTEND_ICONS)
@@ -79,17 +83,17 @@ $(FRONTEND_ICONS): $(FRONTEND_ICONS_LIST) scripts/build-icons.py
 .PHONY: build-icons
 build-icons: $(FRONTEND_ICONS)
 
-# Build and compress the SSR admin frontend with esgun and Go.
-$(FRONTEND_DIST): $(FRONTEND_ICONS) $(FRONTEND_DEPS)
-	cd $(FRONTEND) && go run ../../scripts/frontend
+# Build and compress the SSR admin frontend with the pinned esgun tool.
+$(FRONTEND_DIST): $(FRONTEND_ICONS) $(FRONTEND_DEPS) $(FRONTEND_ALTCHA)
+	cd $(FRONTEND) && go tool esgun build
 	touch -c $(FRONTEND_DIST)
 
 .PHONY: build-frontend
 build-frontend: $(FRONTEND_DIST)
 
 .PHONY: watch-frontend
-watch-frontend: $(FRONTEND_ICONS) $(FRONTEND_DEPS_STAMP)
-	cd $(FRONTEND) && go run ../../scripts/frontend --watch
+watch-frontend: $(FRONTEND_ICONS) $(FRONTEND_DEPS_STAMP) $(FRONTEND_ALTCHA)
+	cd $(FRONTEND) && go tool esgun watch
 
 # Run Go tests.
 .PHONY: test
