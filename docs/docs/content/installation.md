@@ -94,7 +94,7 @@ A nightly build is automatically published with the latest changes merged to the
 
 To compile the latest unreleased version (`master` branch):
 
-1. Make sure `go` and `bun` are installed on your system.
+1. Make sure Go (the version in `go.mod`), Python 3, and Make are installed on your system. Frontend dependencies and bundling are handled by the Go tool [esgun](https://github.com/oddship/esgun), pinned in `go.mod`.
 2. `git clone git@github.com:knadh/listmonk.git`
 3. `cd listmonk && make dist`. This will build the SSR admin frontend and generate the `listmonk` binary.
 

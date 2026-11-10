@@ -13,7 +13,7 @@ STUFFBIN ?= $(GOPATH)/bin/stuffbin
 # SSR admin frontend (built from static/admin/assets -> static/admin/dist).
 FRONTEND = static/admin
 FRONTEND_DIST = $(FRONTEND)/dist
-FRONTEND_NODE_MODULES = $(FRONTEND)/node_modules
+FRONTEND_NODE_MODULES = $(FRONTEND)/vendor/node_modules
 FRONTEND_DEPS_STAMP = $(FRONTEND_NODE_MODULES)/.installed
 
 # Feather icons SVG sprite generated from icons.txt.
@@ -23,8 +23,9 @@ FRONTEND_ICONS = $(FRONTEND)/assets/static/icons.svg
 FRONTEND_DEPS = \
 	$(FRONTEND_DEPS_STAMP) \
 	$(FRONTEND)/package.json \
-	$(FRONTEND)/bun.lock \
-	$(FRONTEND)/build.mjs \
+	$(FRONTEND)/package-lock.json \
+	$(FRONTEND)/esgun.config.json \
+	$(wildcard scripts/frontend/*.go) \
 	$(shell find $(FRONTEND)/assets -type f)
 
 BIN := listmonk
@@ -67,8 +68,8 @@ endif
 	$(GO_RUN) $(if $(DEV_CONFIG),--config="$(DEV_CONFIG)")
 
 # Install SSR admin frontend deps.
-$(FRONTEND_DEPS_STAMP): $(FRONTEND)/package.json $(FRONTEND)/bun.lock
-	cd $(FRONTEND) && bun install --frozen-lockfile
+$(FRONTEND_DEPS_STAMP): $(FRONTEND)/package.json $(FRONTEND)/package-lock.json go.mod go.sum
+	cd $(FRONTEND) && go tool esgun ci
 	touch $@
 
 # Generate svg icon sprite.
@@ -78,13 +79,17 @@ $(FRONTEND_ICONS): $(FRONTEND_ICONS_LIST) scripts/build-icons.py
 .PHONY: build-icons
 build-icons: $(FRONTEND_ICONS)
 
-# Build the SSR admin frontend (Bun) into static/admin/dist.
+# Build and compress the SSR admin frontend with esgun and Go.
 $(FRONTEND_DIST): $(FRONTEND_ICONS) $(FRONTEND_DEPS)
-	cd $(FRONTEND) && bun run build
+	cd $(FRONTEND) && go run ../../scripts/frontend
 	touch -c $(FRONTEND_DIST)
 
 .PHONY: build-frontend
 build-frontend: $(FRONTEND_DIST)
+
+.PHONY: watch-frontend
+watch-frontend: $(FRONTEND_ICONS) $(FRONTEND_DEPS_STAMP)
+	cd $(FRONTEND) && go run ../../scripts/frontend --watch
 
 # Run Go tests.
 .PHONY: test

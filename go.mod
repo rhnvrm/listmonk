@@ -47,6 +47,7 @@ require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
 	github.com/boombuler/barcode v1.1.0 // indirect
+	github.com/evanw/esbuild v0.25.0 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.6 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
@@ -55,6 +56,7 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
+	github.com/oddship/esgun v0.0.0-20260902104812-0e62971cc0c0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/shopspring/decimal v1.6.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
@@ -63,3 +65,5 @@ require (
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
 )
+
+tool github.com/oddship/esgun

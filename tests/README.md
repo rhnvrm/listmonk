@@ -15,15 +15,16 @@ make build-dev-docker
 make run-dev-docker
 ```
 
-Inside the dev container:
+Inside the dev container, install Node.js and npm separately for Playwright.
+They are not required for the listmonk build. Then run:
 
 ```sh
 make build-frontend
 make build
 cd tests
-bun install
-bun playwright install --with-deps chromium
-bun run test
+npm install
+npx playwright install --with-deps chromium
+npm test
 ```
 
 Compose configures the database and existing MailHog service automatically.
@@ -31,12 +32,5 @@ Rebuild the backend after Go or SQL changes, and reinstall the browser and its
 system dependencies when recreating the dev container.
 
 Outside Docker, install the dependencies described in the developer guide.
-From `tests/`, use `bun run test` for headless tests or `bun run test:ui` for the
+From `tests/`, use `npm test` for headless tests or `npm run test:ui` for the
 interactive UI.
-
-The rich-text editor regression tests can also run directly against local
-frontend source, without starting listmonk or touching a database. From `tests/`:
-
-```sh
-bun playwright test --config playwright.richtext.config.js richtext.spec.js
-```

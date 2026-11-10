@@ -1,0 +1,36 @@
+{
+  "root": ".build",
+  "outdir": ".build/js",
+  "resolve": [
+    "vendor/node_modules"
+  ],
+  "entry": [
+    "assets/js/main.js",
+    "assets/js/code-editor.js",
+    "assets/js/richtext-editor.js",
+    "assets/js/visual-editor.js",
+    "assets/js/views/*.js"
+  ],
+  "copies": [
+    {
+      "from": "assets/static",
+      "to": ".build"
+    },
+    {
+      "from": "assets/css/style.css",
+      "to": ".build/style.css"
+    },
+    {
+      "from": "assets/css/richtext.css",
+      "to": ".build/richtext.css"
+    },
+    {
+      "from": "vendor/node_modules/@knadh/oat/oat.min.css",
+      "to": ".build/oat.min.css"
+    },
+    {
+      "from": "vendor/node_modules/altcha/dist/main/altcha.umd.min.cjs",
+      "to": ".build/altcha.umd.js"
+    }
+  ]
+}

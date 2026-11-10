@@ -54,8 +54,8 @@ services:
       - go-build:/root/.cache/go-build
       - admin-dist:/app/static/admin/dist
       - type: volume
-        source: node-modules
-        target: /app/static/admin/node_modules
+        source: frontend-vendor
+        target: /app/static/admin/vendor
         volume:
           nocopy: true
 
@@ -64,4 +64,4 @@ volumes:
   go-mod:
   go-build:
   admin-dist:
-  node-modules:
+  frontend-vendor:

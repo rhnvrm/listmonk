@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Build pipeline for the listmonk SSR admin frontend (Bun + Alpine + Oat).",
+  "description": "Build pipeline for the listmonk SSR admin frontend (esgun + Alpine + Oat).",
   "scripts": {
-    "build": "bun ./build.mjs",
-    "watch": "bun ./build.mjs --watch"
+    "build": "go run ../../scripts/frontend",
+    "watch": "go run ../../scripts/frontend --watch"
   },
   "dependencies": {
     "@codemirror/commands": "^6.10.4",
