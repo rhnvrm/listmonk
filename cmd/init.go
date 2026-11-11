@@ -230,7 +230,7 @@ func initFS(appDir, staticDir, i18nDir string) stuffbin.FileSystem {
 		staticFiles = []string{
 			// These paths are joined with staticDir. The SSR admin frontend is split:
 			// the Go HTML templates (views/, partials/) are parsed from source, while
-			// the JS/CSS/asset bundle is built into admin/dist (see static/admin/build.mjs)
+			// the JS/CSS/asset bundle is built into admin/dist (see static/admin/esgun.config.json)
 			// and served at /admin/static.
 			"./admin/views:/admin/views",
 			"./admin/partials:/admin/partials",

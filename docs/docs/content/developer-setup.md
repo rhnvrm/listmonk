@@ -3,16 +3,17 @@ The app is a Go backend that server-renders the admin UI (HTML templates with JS
 
 
 ### Pre-requisites
-- `go`
+- Go 1.27.3 or newer (see `go.mod`)
 - Python 3 (for generating the frontend icon sprite)
-- Postgres database. If there is no local installation, the demo docker DB can be used for development (`docker compose up demo-db`)
+- Postgres database, or Docker Compose for the complete dev environment below
 
 
 ### First time setup
 `git clone https://github.com/knadh/listmonk.git`. The project uses go.mod, so it's best to clone it outside the Go src path.
 
 1. Copy `config.toml.sample` as `config.toml` and add your config.
-2. Build the frontend and the binary: `make dist` (builds the SSR admin and the Go binary, embedding the assets). Once the binary is built, run `./listmonk --install` to run the DB setup. For subsequent dev runs, use `make run`.
+2. Run `make build-frontend`, then `go run ./cmd --install` to initialize the configured database.
+3. Run `make run` to build frontend assets when needed and start the backend with `go run`. A packed binary is not needed for development.
 
 > [mailhog](https://github.com/mailhog/MailHog) is an excellent standalone mock SMTP server (with a UI) for testing and dev.
 
@@ -21,11 +22,16 @@ The app is a Go backend that server-renders the admin UI (HTML templates with JS
 
 - Run `make build-dev-docker` once to build the dev container which provides Go and Python, with Postgres and MailHog as companion services.
 - Run `make run-dev-docker` to start it and enter its shell.
-- Inside the shell, run `make run` which builds static assets, initializes a fresh DB, and starts listmonk on `:9000`.
-- For subsequent changes, simply Ctrl-C and re-run `make run` for changes to Go and static files to be picked up.
+- Inside the shell, run `make run` which builds static assets when needed, initializes a fresh DB, and starts listmonk with `go run` on `:9000`.
+- After Go, SQL, or HTML template changes, Ctrl-C and re-run `make run`. Templates are parsed at startup.
 
+Once the services are running, enter the dev container with `docker compose -f dev/docker-compose.yml exec dev bash` and run `make run`. Its `DEV_CONFIG` environment variable selects `dev/config.toml` and enables idempotent database initialization. A bare `go run ./cmd --config=dev/config.toml` also starts the backend after initialization and the frontend build, but does not perform those setup steps.
 
-Run `make stop-dev-docker` to stop the container and `make rm-dev-docker` to completely remove it.
+For JS/CSS development, open a second dev-container shell and run `make watch-frontend`. Refresh the browser after a rebuild; the watcher does not restart Go or reload the browser. No Node, npm, or Bun runtime is needed for building or running the app. Bun is only needed for the browser test suite described below.
+
+These commands run inside the dev container. Running the backend on the host requires a host-accessible Postgres instance and a matching local `config.toml`; the dev Compose database is reachable by the service name `db` inside the Compose network.
+
+Run `make stop-dev-docker` to stop the dev services while preserving their volumes. `make rm-dev-docker` also deletes the volumes, including the dev database.
 
 ### Working on the frontend
 
