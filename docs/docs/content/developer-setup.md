@@ -47,6 +47,8 @@ Commit both `package.json` and `package-lock.json` after changing dependencies. 
 
 ### Frontend tests
 
+From a host with Docker Compose installed, run `python3 scripts/test-frontend-docker.py` to smoke-test a clean container build, app startup, frontend watch mode, and a container restart with named dependency and output volumes. The check uses a separate Compose project and removes its containers and volumes on exit. The `Frontend Docker smoke` GitHub Actions workflow runs the same check.
+
 listmonk maintains a Playwright suite in `tests/` for end-to-end testing the admin UI. It runs against the Docker dev environment with Postgres and MailHog. Install Bun separately in the dev container to run Playwright with the test dependencies pinned in `tests/bun.lock`. Bun is not required to build listmonk.
 
 #### Running

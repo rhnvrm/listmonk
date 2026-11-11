@@ -1,0 +1,27 @@
+name: Frontend Docker smoke
+
+on:
+  push:
+    branches: [feat-ssr-no-node]
+  pull_request:
+    paths:
+      - 'static/admin/**'
+      - 'dev/**'
+      - 'scripts/test-frontend-docker.py'
+      - 'Makefile'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/frontend-docker.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build, watch, and restart with Compose volumes
+        run: python3 scripts/test-frontend-docker.py
